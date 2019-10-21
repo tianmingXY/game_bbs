@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.module.mapper.ArticleMapper">
+
+    <resultMap type="com.module.pojo.Article" id="ArticleResult">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="outline" column="outline"/>
+        <result property="picurl" column="picurl"/>
+        <result property="type" column="type"/>
+        <result property="content" column="content"/>
+        <result property="author" column="author"/>
+        <result property="hits" column="hits"/>
+        <result property="state" column="state"/>
+        <result property="intro" column="intro"/>
+        <result property="createtime" column="createtime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+    </resultMap>
+
+    <select id="countData" resultType="map">
+        select  type as result,count(*) as nums
+		from article  group by result
+    </select>
+
+    <select id="selectArticleList" parameterType="com.module.pojo.Article" resultMap="ArticleResult">
+        select s.id,s.title,s.outline,s.picurl,s.type,s.content,s.author,s.hits,s.state,s.intro,s.createtime from
+        article s
+        <where>
+            <if test="title != null and title != ''">
+                AND s.title like concat('%', #{title}, '%')
+            </if>
+            <if test="type != null and type != ''">
+                AND s.type = #{type}
+            </if>
+        </where>
+    </select>
+    <select id="selectArticleById" parameterType="Integer" resultMap="ArticleResult">
+        select s.* 
+		from article s 
+        where s.id = #{id}
+    </select>
+    <select id="selectAll" resultMap="ArticleResult">
+        select s.*
+        from article s where 1=1
+        <if test="title != null and title != '' ">
+            and title like concat('%',#{title},'%')
+        </if>
+        <if test="keyword != null and keyword != '' ">
+            and title like concat('%',#{keyword},'%')
+        </if>
+        <if test="type != null and type != '' ">
+            and type=#{type}
+        </if>
+        <if test="author != null and author != '' ">
+            and author=#{author}
+        </if>
+    </select>
+    <insert id="insertArticle" parameterType="com.module.pojo.Article" useGeneratedKeys="true" keyProperty="id">
+        insert into article (
+        <if test="title != null and title != '' ">title,</if>
+        <if test="outline != null and outline != '' ">outline,</if>
+        <if test="picurl != null and picurl != '' ">picurl,</if>
+        <if test="type != null and type != '' ">type,</if>
+        <if test="content != null and content != '' ">content,</if>
+        <if test="author != null and author != '' ">author,</if>
+        <if test="hits != null">hits,</if>
+        <if test="state != null and state != '' ">state,</if>
+        <if test="intro != null and intro != '' ">intro,</if>
+        <if test="createtime != null">createtime</if>
+        )values(
+        <trim prefixOverrides=",">
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="outline != null and outline != ''">#{outline},</if>
+            <if test="picurl != null and picurl != ''">#{picurl},</if>
+            <if test="type != null and type != ''">#{type},</if>
+            <if test="content != null and content != ''">#{content},</if>
+            <if test="author != null and author != ''">#{author},</if>
+            <if test="hits != null ">#{hits},</if>
+            <if test="state != null and state != ''">#{state},</if>
+            <if test="intro != null and intro != ''">#{intro},</if>
+            <if test="createtime != null">#{createtime,jdbcType=TIMESTAMP}</if>
+        </trim>
+        )
+    </insert>
+
+    <insert id="batchAdd" parameterType="com.module.pojo.Article" useGeneratedKeys="true" keyProperty="id">
+        insert into article (
+        title, outline, picurl, type, content, author, hits, state, intro, createtime )values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (
+            #{item.title}, #{item.outline}, #{item.picurl}, #{item.type}, #{item.content}, #{item.author}, #{item.hits},
+            #{item.state}, #{item.intro}, #{item.createtime,jdbcType=TIMESTAMP} )
+        </foreach>
+    </insert>
+
+    <update id="updateArticle" parameterType="com.module.pojo.Article">
+        update article
+        <set>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="outline != null and outline != ''">outline = #{outline},</if>
+            <if test="picurl != null and picurl != ''">picurl = #{picurl},</if>
+            <if test="type != null and type != ''">type = #{type},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="author != null and author != ''">author = #{author},</if>
+            <if test="hits != null">hits = #{hits},</if>
+            <if test="state != null and state != ''">state = #{state},</if>
+            <if test="intro != null and intro != ''">intro = #{intro},</if>
+            <if test="createtime != null">createtime = #{createtime,jdbcType=TIMESTAMP}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="batchUpdate" parameterType="java.util.List">
+        update article
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="status =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="title != null and title != ''">when id=#{item.id} then #{title}</if>
+                    <if test="outline != null and outline != ''">when id=#{item.id} then #{outline}</if>
+                    <if test="picurl != null and picurl != ''">when id=#{item.id} then #{picurl}</if>
+                    <if test="type != null and type != ''">when id=#{item.id} then #{type}</if>
+                    <if test="content != null and content != ''">when id=#{item.id} then #{content}</if>
+                    <if test="author != null and author != ''">when id=#{item.id} then #{author}</if>
+                    <if test="hits != null">when id=#{item.id} then #{hits}</if>
+                    <if test="state != null and state != ''">when id=#{item.id} then #{state}</if>
+                    <if test="intro != null and intro != ''">when id=#{item.id} then #{intro}</if>
+                    <if test="createtime != null">when id=#{item.id} then #{createtime,jdbcType=TIMESTAMP}</if>
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id,jdbcType=BIGINT}
+        </foreach>
+    </update>
+
+    <delete id="deleteArticleById" parameterType="Integer">
+        delete from article where id = #{value}
+    </delete>
+
+    <delete id="batchDeleteArticle" parameterType="Integer">
+        delete from article where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

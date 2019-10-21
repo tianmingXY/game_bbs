@@ -1,0 +1,31 @@
+Game游戏贴吧
+用户测试账号    test  123456
+管理员测试账号  admin   123456
+数据库每个表都有详细注释
+代码也有详细注释（详细说明）
+前段使用技术：html+JavaScript+css+layui+jQuery
+
+网站功能：实现论坛帖子管理，论坛帖子分类管理，留言管理，用户登录注册，管理员管理，
+验证码使用，ajax使用，分页查询，报表统计，友情链接，问卷提交，问卷添加修改，问卷结果查看等。
+
+
+
+网站前端：http://localhost:8080/CommonWeb/pc/index
+网站后台:http://localhost:8080/CommonWeb/manage/login
+4.系统实现（基础代码，业务功能代码的编写）
+com   项目包结构说明
+└─module
+    ├─controller  控制层，负责请求的处理，数据库的操作调用
+    ├─mapper      数据库操作接口，sql文件在xml中的配置
+    ├─pojo        数据库对应实体类，用来和数据库表实现映射关系
+    └─util        java中常见工具类的存放
+
+所有WEB-INF/view/pc文件夹中的都是前端相关jsp页面
+    login.jsp 登录页面
+    register.jsp   注册页面
+    index.jsp 首页
+    code.jsp 验证码生成页面
+    liuyan.jsp 留言添加显示页面
+    ....
+所有WEB-INF/view/manage文件夹中的都是后台管理相关jsp页面，按照文件夹进行划分表，
+    每一个文件夹对应一张表的操作，例如userinfo是用户表的所有管理操作。

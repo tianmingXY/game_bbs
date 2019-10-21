@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.module.mapper.WenjuanjieguoMapper">
+
+    <resultMap type="com.module.pojo.Wenjuanjieguo" id="WenjuanjieguoResult">
+        <result property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="a1" column="a1"/>
+        <result property="a2" column="a2"/>
+        <result property="a3" column="a3"/>
+        <result property="a4" column="a4"/>
+        <result property="a5" column="a5"/>
+        <result property="a6" column="a6"/>
+        <result property="a7" column="a7"/>
+        <result property="a8" column="a8"/>
+        <result property="a9" column="a9"/>
+        <result property="a10" column="a10"/>
+        <result property="score" column="score"/>
+        <result property="createtime" column="createtime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+    </resultMap>
+
+
+    <select id="selectWenjuanjieguoList" parameterType="com.module.pojo.Wenjuanjieguo" resultMap="WenjuanjieguoResult">
+        select s.id,s.username,s.a1,s.a2,s.a3,s.a4,s.a5,s.a6,s.a7,s.a8,s.a9,s.a10,s.score,s.createtime from
+        wenjuanjieguo s
+        <where>
+        </where>
+    </select>
+    <select id="selectWenjuanjieguoById" parameterType="Integer" resultMap="WenjuanjieguoResult">
+        select s.* 
+		from wenjuanjieguo s 
+        where s.id = #{id}
+    </select>
+    <select id="selectAll" resultMap="WenjuanjieguoResult">
+        select s.* 
+		from wenjuanjieguo s 
+    </select>
+    <insert id="insertWenjuanjieguo" parameterType="com.module.pojo.Wenjuanjieguo" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into wenjuanjieguo (
+        <if test="username != null and username != '' ">username,</if>
+        <if test="a1 != null and a1 != '' ">a1,</if>
+        <if test="a2 != null and a2 != '' ">a2,</if>
+        <if test="a3 != null and a3 != '' ">a3,</if>
+        <if test="a4 != null and a4 != '' ">a4,</if>
+        <if test="a5 != null and a5 != '' ">a5,</if>
+        <if test="a6 != null and a6 != '' ">a6,</if>
+        <if test="a7 != null and a7 != '' ">a7,</if>
+        <if test="a8 != null and a8 != '' ">a8,</if>
+        <if test="a9 != null and a9 != '' ">a9,</if>
+        <if test="a10 != null and a10 != '' ">a10,</if>
+        <if test="score != null and score != '' ">score,</if>
+        <if test="createtime != null">createtime</if>
+        )values(
+        <trim prefixOverrides=",">
+            <if test="username != null and username != ''">#{username},</if>
+            <if test="a1 != null and a1 != ''">#{a1},</if>
+            <if test="a2 != null and a2 != ''">#{a2},</if>
+            <if test="a3 != null and a3 != ''">#{a3},</if>
+            <if test="a4 != null and a4 != ''">#{a4},</if>
+            <if test="a5 != null and a5 != ''">#{a5},</if>
+            <if test="a6 != null and a6 != ''">#{a6},</if>
+            <if test="a7 != null and a7 != ''">#{a7},</if>
+            <if test="a8 != null and a8 != ''">#{a8},</if>
+            <if test="a9 != null and a9 != ''">#{a9},</if>
+            <if test="a10 != null and a10 != ''">#{a10},</if>
+            <if test="score != null and score != ''">#{score},</if>
+            <if test="createtime != null">#{createtime,jdbcType=TIMESTAMP}</if>
+        </trim>
+        )
+    </insert>
+
+    <insert id="batchAdd" parameterType="com.module.pojo.Wenjuanjieguo" useGeneratedKeys="true" keyProperty="id">
+        insert into wenjuanjieguo (
+        username, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10,score, createtime )values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (
+            #{item.username}, #{item.a1}, #{item.a2}, #{item.a3}, #{item.a4}, #{item.a5}, #{item.a6}, #{item.a7},
+            #{item.a8}, #{item.a9}, #{item.a10},#{item.score}, #{item.createtime,jdbcType=TIMESTAMP} )
+        </foreach>
+    </insert>
+
+    <update id="updateWenjuanjieguo" parameterType="com.module.pojo.Wenjuanjieguo">
+        update wenjuanjieguo
+        <set>
+            <if test="username != null and username != ''">username = #{username},</if>
+            <if test="a1 != null and a1 != ''">a1 = #{a1},</if>
+            <if test="a2 != null and a2 != ''">a2 = #{a2},</if>
+            <if test="a3 != null and a3 != ''">a3 = #{a3},</if>
+            <if test="a4 != null and a4 != ''">a4 = #{a4},</if>
+            <if test="a5 != null and a5 != ''">a5 = #{a5},</if>
+            <if test="a6 != null and a6 != ''">a6 = #{a6},</if>
+            <if test="a7 != null and a7 != ''">a7 = #{a7},</if>
+            <if test="a8 != null and a8 != ''">a8 = #{a8},</if>
+            <if test="a9 != null and a9 != ''">a9 = #{a9},</if>
+            <if test="a10 != null and a10 != ''">a10 = #{a10},</if>
+            <if test="score != null and score != ''">score = #{score},</if>
+            <if test="createtime != null">createtime = #{createtime,jdbcType=TIMESTAMP}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="batchUpdate" parameterType="java.util.List">
+        update wenjuanjieguo
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="status =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="username != null and username != ''">when id=#{item.id} then #{username}</if>
+                    <if test="a1 != null and a1 != ''">when id=#{item.id} then #{a1}</if>
+                    <if test="a2 != null and a2 != ''">when id=#{item.id} then #{a2}</if>
+                    <if test="a3 != null and a3 != ''">when id=#{item.id} then #{a3}</if>
+                    <if test="a4 != null and a4 != ''">when id=#{item.id} then #{a4}</if>
+                    <if test="a5 != null and a5 != ''">when id=#{item.id} then #{a5}</if>
+                    <if test="a6 != null and a6 != ''">when id=#{item.id} then #{a6}</if>
+                    <if test="a7 != null and a7 != ''">when id=#{item.id} then #{a7}</if>
+                    <if test="a8 != null and a8 != ''">when id=#{item.id} then #{a8}</if>
+                    <if test="a9 != null and a9 != ''">when id=#{item.id} then #{a9}</if>
+                    <if test="a10 != null and a10 != ''">when id=#{item.id} then #{a10}</if>
+                    <if test="createtime != null">when id=#{item.id} then #{createtime,jdbcType=TIMESTAMP}</if>
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id,jdbcType=BIGINT}
+        </foreach>
+    </update>
+
+    <delete id="deleteWenjuanjieguoById" parameterType="Integer">
+        delete from wenjuanjieguo where id = #{value}
+    </delete>
+
+    <delete id="batchDeleteWenjuanjieguo" parameterType="Integer">
+        delete from wenjuanjieguo where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

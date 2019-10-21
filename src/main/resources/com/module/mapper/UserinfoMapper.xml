@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.module.mapper.UserinfoMapper">
+
+    <resultMap type="com.module.pojo.Userinfo" id="UserinfoResult">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="money" column="money"/>
+        <result property="picurl" column="picurl"/>
+        <result property="sex" column="sex"/>
+        <result property="password" column="password"/>
+        <result property="role" column="role"/>
+        <result property="createtime" column="createtime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+    </resultMap>
+
+
+    <select id="selectUserinfoList" parameterType="com.module.pojo.Userinfo" resultMap="UserinfoResult">
+        select s.id,s.name,s.phone,s.email,s.money,s.picurl,s.sex,s.password,s.role,s.createtime from userinfo s
+        <where>
+        </where>
+    </select>
+    <select id="selectUserinfoById" parameterType="Integer" resultMap="UserinfoResult">
+        select s.*
+		from userinfo s
+        where s.id = #{id}
+    </select>
+    <select id="selectAll" resultMap="UserinfoResult">
+        select s.*
+        from userinfo s
+        <where>
+            <if test="name != null and name != '' ">
+                and name=#{name}
+            </if>
+        </where>
+    </select>
+    <insert id="insertUserinfo" parameterType="com.module.pojo.Userinfo" useGeneratedKeys="true" keyProperty="id">
+        insert into userinfo (
+        <if test="name != null and name != '' ">name,</if>
+        <if test="phone != null and phone != '' ">phone,</if>
+        <if test="email != null and email != '' ">email,</if>
+        <if test="money != null and money != '' ">money,</if>
+        <if test="picurl != null and picurl != '' ">picurl,</if>
+        <if test="sex != null and sex != '' ">sex,</if>
+        <if test="password != null and password != '' ">password,</if>
+        <if test="role != null and role != '' ">role,</if>
+        <if test="createtime != null">createtime</if>
+        )values(
+        <trim prefixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="email != null and email != ''">#{email},</if>
+            <if test="money != null and money != ''">#{money},</if>
+            <if test="picurl != null and picurl != ''">#{picurl},</if>
+            <if test="sex != null and sex != ''">#{sex},</if>
+            <if test="password != null and password != ''">#{password},</if>
+            <if test="role != null and role != ''">#{role},</if>
+            <if test="createtime != null">#{createtime,jdbcType=TIMESTAMP}</if>
+        </trim>
+        )
+    </insert>
+
+    <insert id="batchAdd" parameterType="com.module.pojo.Userinfo" useGeneratedKeys="true" keyProperty="id">
+        insert into userinfo (
+        name, phone, email, money, picurl, sex, password, role, createtime )values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (
+            #{item.name}, #{item.phone}, #{item.email}, #{item.money}, #{item.picurl}, #{item.sex}, #{item.password},
+            #{item.role}, #{item.createtime,jdbcType=TIMESTAMP} )
+        </foreach>
+    </insert>
+
+    <update id="updateUserinfo" parameterType="com.module.pojo.Userinfo">
+        update userinfo
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="email != null and email != ''">email = #{email},</if>
+            <if test="money != null and money != ''">money = #{money},</if>
+            <if test="picurl != null and picurl != ''">picurl = #{picurl},</if>
+            <if test="sex != null and sex != ''">sex = #{sex},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="role != null and role != ''">role = #{role},</if>
+            <if test="createtime != null">createtime = #{createtime,jdbcType=TIMESTAMP}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="batchUpdate" parameterType="java.util.List">
+        update userinfo
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="status =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="name != null and name != ''">when id=#{item.id} then #{name}</if>
+                    <if test="phone != null and phone != ''">when id=#{item.id} then #{phone}</if>
+                    <if test="email != null and email != ''">when id=#{item.id} then #{email}</if>
+                    <if test="money != null and money != ''">when id=#{item.id} then #{money}</if>
+                    <if test="picurl != null and picurl != ''">when id=#{item.id} then #{picurl}</if>
+                    <if test="sex != null and sex != ''">when id=#{item.id} then #{sex}</if>
+                    <if test="password != null and password != ''">when id=#{item.id} then #{password}</if>
+                    <if test="role != null and role != ''">when id=#{item.id} then #{role}</if>
+                    <if test="createtime != null">when id=#{item.id} then #{createtime,jdbcType=TIMESTAMP}</if>
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id,jdbcType=BIGINT}
+        </foreach>
+    </update>
+
+    <delete id="deleteUserinfoById" parameterType="Integer">
+        delete from userinfo where id = #{value}
+    </delete>
+
+    <delete id="batchDeleteUserinfo" parameterType="Integer">
+        delete from userinfo where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

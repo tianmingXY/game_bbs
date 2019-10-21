@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.module.mapper.LinkurlMapper">
+    
+    <resultMap type="com.module.pojo.Linkurl" id="LinkurlResult">
+        <result property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="url" column="url" />
+        <result property="picurl" column="picurl" />
+        <result property="intro" column="intro" />
+        <result property="createtime" column="createtime" jdbcType="TIMESTAMP" javaType="java.util.Date"   />
+    </resultMap>
+    
+    
+    <select id="selectLinkurlList" parameterType="com.module.pojo.Linkurl" resultMap="LinkurlResult">
+        select s.id,s.name,s.url,s.picurl,s.intro,s.createtime from linkurl s 
+        <where>  
+        </where>
+    </select>
+    <select id="selectLinkurlById" parameterType="Integer" resultMap="LinkurlResult">
+        select s.* 
+		from linkurl s 
+        where s.id = #{id}
+    </select>
+    <select id="selectAll" resultMap="LinkurlResult">
+        select s.* 
+		from linkurl s 
+    </select>
+    <insert id="insertLinkurl" parameterType="com.module.pojo.Linkurl" useGeneratedKeys="true" keyProperty="id">
+        insert into linkurl (
+			<if test="name != null and name != '' ">name, </if>
+			<if test="url != null and url != '' ">url, </if>
+			<if test="picurl != null and picurl != '' ">picurl, </if>
+			<if test="intro != null and intro != '' ">intro, </if>
+			<if test="createtime != null">createtime</if> 
+        )values(
+		<trim  prefixOverrides=",">
+			<if test="name != null and name != ''">#{name}, </if>
+			<if test="url != null and url != ''">#{url}, </if>
+			<if test="picurl != null and picurl != ''">#{picurl}, </if>
+			<if test="intro != null and intro != ''">#{intro}, </if>
+			<if test="createtime != null">#{createtime,jdbcType=TIMESTAMP}</if>
+			</trim>
+		)
+    </insert>
+
+    <insert id="batchAdd" parameterType="com.module.pojo.Linkurl" useGeneratedKeys="true" keyProperty="id">
+        insert into linkurl (
+name, url, picurl, intro, createtime        )values
+        <foreach item="item" index="index" collection="list" separator=",">
+        (
+#{item.name}, #{item.url}, #{item.picurl}, #{item.intro}, #{item.createtime,jdbcType=TIMESTAMP}		)
+		</foreach>
+    </insert>
+    	 
+    <update id="updateLinkurl" parameterType="com.module.pojo.Linkurl">
+        update linkurl 
+        <set>
+			<if test="name != null and name != ''">name = #{name}, </if>
+			<if test="url != null and url != ''">url = #{url}, </if>
+			<if test="picurl != null and picurl != ''">picurl = #{picurl}, </if>
+			<if test="intro != null and intro != ''">intro = #{intro}, </if>
+            <if test="createtime != null">createtime = #{createtime,jdbcType=TIMESTAMP}</if>
+        </set>
+        where id = #{id}
+    </update>
+	
+    <update id="batchUpdate" parameterType="java.util.List">
+        update linkurl 
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="status =case" suffix="end,">
+	            <foreach collection="list" item="item" index="index">
+					<if test="name != null and name != ''">when id=#{item.id} then #{name}</if>
+					<if test="url != null and url != ''">when id=#{item.id} then #{url}</if>
+					<if test="picurl != null and picurl != ''">when id=#{item.id} then #{picurl}</if>
+					<if test="intro != null and intro != ''">when id=#{item.id} then #{intro}</if>
+            		<if test="createtime != null">when id=#{item.id} then #{createtime,jdbcType=TIMESTAMP}</if>
+       		</foreach>
+        </trim>
+     </trim>
+     where id in
+     <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+         #{item.id,jdbcType=BIGINT}
+     </foreach>
+   </update>
+
+    <delete id="deleteLinkurlById" parameterType="Integer">
+        delete from linkurl where id = #{value}
+    </delete>
+	
+    <delete id="batchDeleteLinkurl" parameterType="Integer">
+        delete from linkurl where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+        #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

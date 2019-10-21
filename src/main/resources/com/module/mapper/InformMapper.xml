@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.module.mapper.InformMapper">
+
+    <resultMap type="com.module.pojo.Inform" id="InformResult">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="createtime" column="createtime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+    </resultMap>
+
+
+    <select id="selectInformList" parameterType="com.module.pojo.Inform" resultMap="InformResult">
+        select s.id,s.title,s.content,s.createtime from inform s
+        <where>
+        </where>
+    </select>
+    <select id="selectInformById" parameterType="Integer" resultMap="InformResult">
+        select s.* 
+		from inform s 
+        where s.id = #{id}
+    </select>
+    <select id="selectAll" resultMap="InformResult">
+        select s.* 
+		from inform s 
+    </select>
+    <insert id="insertInform" parameterType="com.module.pojo.Inform" useGeneratedKeys="true" keyProperty="id">
+        insert into inform (
+        <if test="title != null and title != '' ">title,</if>
+        <if test="content != null and content != '' ">content,</if>
+        <if test="createtime != null">createtime</if>
+        )values(
+        <if test="title != null and title != ''">#{title},</if>
+        <if test="content != null and content != ''">#{content},</if>
+        <if test="createtime != null">#{createtime,jdbcType=TIMESTAMP}</if>
+        )
+    </insert>
+
+    <insert id="batchAdd" parameterType="com.module.pojo.Inform" useGeneratedKeys="true" keyProperty="id">
+        insert into inform (
+        title, content, createtime )values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (
+            #{item.title}, #{item.content}, #{item.createtime,jdbcType=TIMESTAMP} )
+        </foreach>
+    </insert>
+
+    <update id="updateInform" parameterType="com.module.pojo.Inform">
+        update inform
+        <set>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="createtime != null">createtime = #{createtime,jdbcType=TIMESTAMP}</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="batchUpdate" parameterType="java.util.List">
+        update inform
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="status =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="title != null and title != ''">when id=#{item.id} then #{title}</if>
+                    <if test="content != null and content != ''">when id=#{item.id} then #{content}</if>
+                    <if test="createtime != null">when id=#{item.id} then #{createtime,jdbcType=TIMESTAMP}</if>
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id,jdbcType=BIGINT}
+        </foreach>
+    </update>
+
+    <delete id="deleteInformById" parameterType="Integer">
+        delete from inform where id = #{value}
+    </delete>
+
+    <delete id="batchDeleteInform" parameterType="Integer">
+        delete from inform where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
