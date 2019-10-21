@@ -61,11 +61,11 @@ com   项目包结构说明
     ....
 所有WEB-INF/view/manage文件夹中的都是后台管理相关jsp页面，按照文件夹进行划分表，
     每一个文件夹对应一张表的操作，例如userinfo是用户表的所有管理操作。
-###前端首页
+### 前端首页
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/1021/104140_47cf6ccc_865419.png "首页.png")
-###帖子详情
+### 帖子详情
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/1021/104204_c6d5eec8_865419.png "帖子详情.png")
-###帖子列表
+### 帖子列表
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/1021/104219_e553b7df_865419.png "帖子列表.png")
 
 
