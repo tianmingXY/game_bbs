@@ -96,5 +96,11 @@ com   项目包结构说明
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/1021/103238_be8ad00a_865419.png "注册.png")
 
+
+### 论文截图
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1018/110525_adad9650_865419.png "论文截图01.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1018/110536_58d65d5e_865419.png "论文截图02.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/1018/110545_162fe3f1_865419.png "论文截图03.png")
+
 ### 运行中有什么不明白的地方或者不会运行，可以加我扣扣联系1516993194
 
